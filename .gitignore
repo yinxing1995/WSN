@@ -1,6 +1,12 @@
 # Prerequisites
 *.d
 
+# Project files
+Graduation_Project.X/build/*
+Graduation_Project.X/debug/*
+Graduation_Project.X/dist/*
+Graduation_Project.X/nbproject/*
+
 # Object files
 *.o
 *.ko
