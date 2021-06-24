@@ -23,8 +23,8 @@ void Init_IO(void)
     INTCONbits.GIEH = 1;                                                   //global interrupt enable
     OSCCONbits.IDLEN = 1;                                                  //enable idle mode (when Sleep() is executed)
     
-    INTCONbits.PEIE = 1; // Enable Peripheral interrupt
-    PIR1bits.RCIF = 0; // Clear
+    //INTCONbits.PEIE = 1; // Enable Peripheral interrupt
+    //PIR1bits.RCIF = 0; // Clear
  
     OpenUSART(USART_TX_INT_OFF & USART_RX_INT_ON & USART_ASYNCH_MODE &
               USART_EIGHT_BIT & USART_CONT_RX & USART_BRGH_HIGH,25 );          //setup USART @ 9600 Baud

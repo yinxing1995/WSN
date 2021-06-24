@@ -29,13 +29,22 @@ char Text[20];
  
          
 
-char b = 0;
+volatile char rev = 0;
+volatile char timerflag = 0;
 
 void interrupt myISR()
 {
-    b = ReadUSART();
-    PIR1bits.RCIF = 0;
-    USARTOut(&b,1);
+    if(PIR1bits.RCIF)
+    {
+        rev = ReadUSART();
+        PIR1bits.RCIF = 0;
+        USARTOut(&rev,1);
+    }
+    if(INTCONbits.TMR0IF)
+    {
+        timerflag = 1;
+        INTCONbits.TMR0IF = 0;
+    }
 }
 
 
@@ -45,17 +54,17 @@ void main(void)
     __delay_ms(150);
     __delay_ms(150);
     __delay_ms(150);
-    //OpenTimer0( TIMER_INT_ON & T0_16BIT & T0_SOURCE_INT & T0_PS_1_16);                   //setup timer 0 with prescaler x16
-    //WriteTimer0(3036);
+    OpenTimer0( TIMER_INT_ON & T0_16BIT & T0_SOURCE_INT & T0_PS_1_16);                   //setup timer 0 with prescaler x16
+    WriteTimer0(3036);
 #ifdef TSL2561
     Init_I2C();
     TSL_PowerOn();
     TSL_Set_Time();
     while(1)
     {
-        if(INTCONbits.TMR0IF)                                                                                
+        if(timerflag)                                                                                
         {
-            INTCONbits.TMR0IF = 0;
+            timerflag = 0;
             short unsigned int data = TSL_Get_Light_Channel0();
             sprintf(Text,"%d \r\n",data);
             USARTOut(Text,strlen(Text));
