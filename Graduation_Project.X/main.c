@@ -20,7 +20,7 @@
 #include "protocol.h"
  
 
-//#define AMG8833
+#define AMG8833
 //#define TSL2561
 
 char Text[20];
@@ -59,9 +59,17 @@ void main(void)
     WriteTimer0(3036);
     
     Init_Attributes();
-    AddEndpoint(LightStrength,_INT,1,&Light_Strngth,READONLY,TSL_Init,TSL_GetData,0);
-    InitEndpoint();
 #ifdef TSL2561
+    AddEndpoint(LightStrength,_INT,1,&Light_Strngth,READONLY,TSL_Init,TSL_GetData,0);
+#elif defined AMG8833
+    AddEndpoint(Temperature,_FLOAT,1,&Temp_Value,READONLY,AMG8833_Init,AMG88xx_GetTemp,0);
+    AddEndpoint(Temperature,_FLOAT,64,&Temp_Pixel,READONLY,NULL,AMG88xx_GetPixel,0);
+    //AddEndpoint(0,0,0,0,0,0,0,0);
+#endif
+    InitEndpoint();
+
+/*
+// TSL2561
     Init_I2C();
     TSL_PowerOn();
     TSL_Set_Time();
@@ -75,7 +83,7 @@ void main(void)
             USARTOut(Text,strlen(Text));
         }
     }
-#elif defined AMG8833
+// defined AMG8833
     AMG8833_Init();
     while(1)
     {
@@ -107,7 +115,7 @@ void main(void)
             PORTA = 0x04;
         }           
     }
-#else
+*/
     while(1)
     {
         if(timerflag)
@@ -116,8 +124,7 @@ void main(void)
             EndpointGetData();
             EndpointReport();
         }
-    }
-#endif    
+    } 
 }
 
 

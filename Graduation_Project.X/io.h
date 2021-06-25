@@ -69,7 +69,7 @@ extern "C" {
 // CONFIG7H
 #pragma config EBTRB = OFF      // Boot Block Table Read Protection bit (Boot Block (000000-0007FFh) not protected from table reads executed in other blocks)
 
-#define MAX_SIZE 100 
+#define MAX_SIZE 50 
 
 void Init_IO(void);
 void USARTOut(const char *data, char bytes);

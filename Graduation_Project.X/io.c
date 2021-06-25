@@ -30,7 +30,7 @@ void Init_IO(void)
     //PIR1bits.RCIF = 0; // Clear
  
     OpenUSART(USART_TX_INT_OFF & USART_RX_INT_ON & USART_ASYNCH_MODE &
-              USART_EIGHT_BIT & USART_CONT_RX & USART_BRGH_HIGH,25 );          //setup USART @ 9600 Baud
+              USART_EIGHT_BIT & USART_CONT_RX & USART_BRGH_HIGH,12 );          //setup USART @ 19200 Baud
     
     OpenSPI(SPI_FOSC_4,MODE_00,SMPMID);               //setup SPI bus (SPI mode 00, 1MHz SCLK) (MRF24J40)
 }
@@ -55,7 +55,7 @@ static void printint(int data)
 static printfloat(float data)
 {
     char p[MAX_SIZE] = {0};
-    sprintf(p,"%f",data);
+    sprintf(p,"%.2f",data);
     USARTOut(p,strlen(p));
 }
 

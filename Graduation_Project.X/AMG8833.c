@@ -1,5 +1,7 @@
 #include "AMG8833.h"
 #include "i2c.h"
+#include <string.h>
+#include "io.h"
 
 //AMG8833 functions
 unsigned char AMG_IIC_Write_1Byte(unsigned char SlaveAddress, unsigned char REG_Address,unsigned char REG_data)
@@ -117,12 +119,14 @@ float AMG88xx_ReadThermistor(void)
 	
 	AMG_I2C_Read_nByte(AMG88xx_ADR,AMG88xx_TTHL, raw, 2);
 	recast = ((short unsigned int)raw[1] << 8) | ((short unsigned int)raw[0]);
+#ifdef DEBUG    
     debugvalue = recast;//debug
+#endif
 	return signedMag12ToFloat(recast) * AMG88xx_THERMISTOR_CONVERSION;
 }
 
 
-void amg88xx_readPixels(float *buf, unsigned char size)
+void AMG88xx_ReadPixels(float *buf, unsigned char size)
 {
 	short unsigned int recast;
 	float converted;
@@ -138,4 +142,19 @@ void amg88xx_readPixels(float *buf, unsigned char size)
 		converted = signedMag12ToFloat(recast) * AMG88xx_PIXEL_TEMP_CONVERSION;
 		buf[i] = converted;
 	}
+}
+
+void AMG88xx_GetTemp(void *Data)
+{
+    float value = AMG88xx_ReadThermistor();
+    memcpy(Data, &value, sizeof(float));
+#ifdef DEBUG
+    float* T = (float *)Data;
+    Uprintf("The temp = %f\r\n",*T);
+#endif
+}
+
+void AMG88xx_GetPixel(void *Data)
+{
+    AMG88xx_ReadPixels((float *)Data, 64);
 }

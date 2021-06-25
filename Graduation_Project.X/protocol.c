@@ -34,7 +34,8 @@ void InitEndpoint()
     int i = 0;
     for(i=0;i<NumofElement;i++)
     {
-        Array[i].InitFun();
+        if(Array[i].InitFun)
+            Array[i].InitFun();
     }
 }
 
@@ -64,17 +65,17 @@ void EndpointReport()
             Uprintf("Value = ");
             for(q=0;q<Array[i].DataLength;q++)
             {
-                Uprintf(" %d ",*p);
+                Uprintf(" %d ",*p++);
             }            
             Uprintf("\r\n");
         }
         else
         {
             float *p = (float *)(Array[i].Data);
-            Uprintf("Value = ");
+            Uprintf("Float value = ");
             for(q=0;q<Array[i].DataLength;q++)
             {
-                Uprintf(" %f ",p);
+                Uprintf(" %f ",*p++);
             }            
             Uprintf("\r\n");
         }

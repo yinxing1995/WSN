@@ -21,8 +21,11 @@ extern "C" {
 #define AMG88xx_THERMISTOR_CONVERSION 0.0625
     
 #define AMG88xx_ADR    0xD0 //5?????????
+//#define DEBUG
 
-char Test[13];
+//char Test[13];
+float Temp_Value;
+float Temp_Pixel[64];
 short unsigned int debugvalue;
  
 enum
@@ -81,7 +84,10 @@ unsigned char AMG_I2C_Read_nByte(unsigned char SlaveAddress, unsigned char REG_A
 void AMG8833_Init(void);
 float signedMag12ToFloat(short unsigned int val);
 float AMG88xx_ReadThermistor(void);
-void amg88xx_readPixels(float *buf, unsigned char size);
+void AMG88xx_ReadPixels(float *buf, unsigned char size);
+
+void AMG88xx_GetTemp(void *Data);
+void AMG88xx_GetPixel(void *Data);
  
 #endif
 
