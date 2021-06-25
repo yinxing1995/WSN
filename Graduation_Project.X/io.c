@@ -1,6 +1,9 @@
 #include "io.h"
 #include "usart.h"
 #include "spi.h"
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
 
 void Init_IO(void)
 {
@@ -40,4 +43,54 @@ void USARTOut(const char *data, char bytes)
         while(BusyUSART());
         WriteUSART(data[i]);
     }
-}  
+}
+
+static void printint(int data)
+{
+    char p[MAX_SIZE] = {0};
+    sprintf(p,"%d",data);
+    USARTOut(p,strlen(p));
+}
+
+static printfloat(float data)
+{
+    char p[MAX_SIZE] = {0};
+    sprintf(p,"%f",data);
+    USARTOut(p,strlen(p));
+}
+
+static printchar(char data)
+{
+    USARTOut(&data,1);
+}
+
+void Uprintf(const char *fmt, ...)
+{
+    va_list ap; /* points to each unnamed arg in turn */ 
+	char *p, *sval;
+	int ival;
+	float dval;
+	va_start(ap, fmt); /* make ap point to 1st unnamed arg */ 
+	for (p = fmt; *p; p++) {
+		if (*p != '%') { 
+			printchar(*p);
+			continue; 
+		}
+		switch (*++p) { 
+			case 'd':
+				ival = va_arg(ap, int); printint(ival); 
+				break;
+			case 'f':
+				dval = va_arg(ap, double); printfloat(dval);
+				break;
+			case 's':
+				for (sval = va_arg(ap, char *); *sval; sval++)
+					printchar(*sval); 
+				break;
+			default: 
+				printchar(*p);
+				break; 
+		}
+	}
+	va_end(ap); /* clean up when done */ 
+}

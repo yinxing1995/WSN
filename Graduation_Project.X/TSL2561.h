@@ -13,7 +13,7 @@ extern "C" {
 #endif
 
 #include <xc.h>
-#include "i2c.h"
+
 
 #define SLA_WRITE 0x72
 #define SLA_READ 0x73
@@ -26,6 +26,7 @@ extern "C" {
 #define TSL2561_CONTROL_POWERON   (0x03)
 #define TSL2561_CONTROL_POWEROFF  (0x00)
 
+int Light_Strngth; 
 
 enum
 {
@@ -52,6 +53,9 @@ enum
 unsigned char TSL_PowerOn();
 void TSL_Set_Time();
 short unsigned int TSL_Get_Light_Channel0();
+
+void TSL_Init();
+void TSL_GetData(void *Data);
 
 #ifdef	__cplusplus
 }

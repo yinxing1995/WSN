@@ -17,6 +17,7 @@
 #include "TSL2561.h"
 #include "crc.h"
 #include "io.h"
+#include "protocol.h"
  
 
 //#define AMG8833
@@ -56,6 +57,10 @@ void main(void)
     __delay_ms(150);
     OpenTimer0( TIMER_INT_ON & T0_16BIT & T0_SOURCE_INT & T0_PS_1_16);                   //setup timer 0 with prescaler x16
     WriteTimer0(3036);
+    
+    Init_Attributes();
+    AddEndpoint(LightStrength,_INT,1,&Light_Strngth,READONLY,TSL_Init,TSL_GetData,0);
+    InitEndpoint();
 #ifdef TSL2561
     Init_I2C();
     TSL_PowerOn();
@@ -105,7 +110,12 @@ void main(void)
 #else
     while(1)
     {
-        ;
+        if(timerflag)
+        {
+            timerflag = 0;
+            EndpointGetData();
+            EndpointReport();
+        }
     }
 #endif    
 }

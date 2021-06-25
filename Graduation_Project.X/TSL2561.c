@@ -1,4 +1,8 @@
 #include "TSL2561.h"
+#include <string.h>
+#include <stdio.h>
+#include "io.h"
+#include "i2c.h"
 
 unsigned char TSL_PowerOn()
 {
@@ -69,4 +73,29 @@ short unsigned int TSL_Get_Light_Channel0()
 	date+= (IIC_Read_Byte(NACK)<<8);
 	IIC_Stop();
 	return date;
+}
+
+void TSL_Init()
+{
+    Init_I2C();
+    TSL_PowerOn();
+    TSL_Set_Time();
+    /*
+    char *p = "I am ready\r\n";
+    USARTOut(p,strlen(p));
+    */
+}
+
+void TSL_GetData(void * Data)
+{
+    int value = (int)TSL_Get_Light_Channel0();
+    /*
+    char p[10];   
+    sprintf(p,"Data=%d\r\n",value);
+    USARTOut(p,strlen(p));
+    */
+    memcpy(Data, &value, sizeof(int));
+    //int* T = (int *)Data;
+    //sprintf(p,"Copied value=%d\r\n",T);
+    //USARTOut(p,strlen(p));
 }
