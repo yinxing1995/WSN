@@ -35,7 +35,7 @@ void Init_IO(void)
     OpenSPI(SPI_FOSC_4,MODE_00,SMPMID);               //setup SPI bus (SPI mode 00, 1MHz SCLK) (MRF24J40)
 }
 
-void USARTOut(const char *data, char bytes)
+void USARTOut(const char *data, unsigned short int bytes)
 {
     int i;
     for(i=0; i<bytes; i++)
@@ -52,14 +52,14 @@ static void printint(int data)
     USARTOut(p,strlen(p));
 }
 
-static printfloat(float data)
+static void printfloat(float data)
 {
     char p[MAX_SIZE] = {0};
     sprintf(p,"%.2f",data);
     USARTOut(p,strlen(p));
 }
 
-static printchar(char data)
+static void printchar(char data)
 {
     USARTOut(&data,1);
 }

@@ -17,9 +17,13 @@ extern "C" {
 //Construction:Length|FrameType|"Initialized"|CheckSum   
 
 #define MAX_Num 5
-#define DEBUG
+#define MAX_SIZE_OF_FRAME 100
+#define NODE_ID 1
+//#define DEBUG
 
-enum
+char Message[MAX_SIZE_OF_FRAME];
+
+enum Cluster
 {
     Temperature = 0x00,
     TemperatureArray = 0x01,
@@ -29,20 +33,26 @@ enum
     OnOff = 0x05,
 };
 
-enum
+enum Control
 {
     READWRITE = 0x00,
     READONLY =0x01,
 };
 
-enum
+enum DataType
 {
     _INT = 0x00,
     _FLOAT = 0x01,
 };
 
+enum FrameType
+{
+    REPORT = 0x00,
+    CHECK = 0x01,
+    NETSTATUS = 0x02,
+};
 
-typedef struct Cluster
+typedef struct ClusterStructure
 {
     unsigned char ClusterID;
     //char * Description;

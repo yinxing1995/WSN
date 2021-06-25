@@ -18,17 +18,11 @@
 #include "crc.h"
 #include "io.h"
 #include "protocol.h"
- 
 
 #define AMG8833
 //#define TSL2561
 
-char Text[20];
-
-
-
- 
-         
+#define REPORT_TIMER 5
 
 volatile char rev = 0;
 volatile char timerflag = 0;
@@ -43,7 +37,7 @@ void interrupt myISR()
     }
     if(INTCONbits.TMR0IF)
     {
-        timerflag = 1;
+        timerflag++;
         INTCONbits.TMR0IF = 0;
     }
 }
@@ -64,10 +58,8 @@ void main(void)
 #elif defined AMG8833
     AddEndpoint(Temperature,_FLOAT,1,&Temp_Value,READONLY,AMG8833_Init,AMG88xx_GetTemp,0);
     AddEndpoint(Temperature,_FLOAT,64,&Temp_Pixel,READONLY,NULL,AMG88xx_GetPixel,0);
-    //AddEndpoint(0,0,0,0,0,0,0,0);
 #endif
     InitEndpoint();
-
 /*
 // TSL2561
     Init_I2C();
@@ -118,12 +110,13 @@ void main(void)
 */
     while(1)
     {
-        if(timerflag)
+        if(timerflag == REPORT_TIMER)
         {
             timerflag = 0;
             EndpointGetData();
             EndpointReport();
         }
+        //
     } 
 }
 

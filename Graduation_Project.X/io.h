@@ -72,7 +72,7 @@ extern "C" {
 #define MAX_SIZE 50 
 
 void Init_IO(void);
-void USARTOut(const char *data, char bytes);
+void USARTOut(const char *data, unsigned short int bytes);
 void Uprintf(const char *fmt, ...);
 
 #ifdef	__cplusplus
