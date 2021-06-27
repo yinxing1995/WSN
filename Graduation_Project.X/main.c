@@ -5,24 +5,26 @@
 #include <stdlib.h>                              //standard library
 #include <stdio.h>
 #include <spi.h>                                  //serial peripheral interface functions
-#include <delays.h>         //time delay functions
+//#include <delays.h>         //time delay functions
 #include <usart.h>                              //USART functions
 #include <string.h>                             //string functions
-#include <adc.h>
+//#include <adc.h>
 #include <timers.h>
 #include "MRF24J40.h"                       //driver function definitions for MRF24J40 RF transceiver
 #include <p18c452.h>
 #include "AMG8833.h"
-#include "i2c.h"
+//#include "i2c.h"
 #include "TSL2561.h"
-#include "crc.h"
+//#include "crc.h"
 #include "io.h"
 #include "protocol.h"
+#include "DHT22.h"
 
-#define AMG8833
+#define DHT22
+//#define AMG8833
 //#define TSL2561
 
-#define REPORT_TIMER 5
+#define REPORT_TIMER 3
 
 volatile char rev = 0;
 volatile char timerflag = 0;
@@ -33,12 +35,7 @@ void interrupt myISR()
     {
         rev = ReadUSART();
         PIR1bits.RCIF = 0;
-        USARTOut(&rev,1);
-    }
-    if(INTCONbits.TMR0IF)
-    {
-        timerflag++;
-        INTCONbits.TMR0IF = 0;
+        USARTOut((const char *)&rev,1);
     }
 }
 
@@ -46,18 +43,18 @@ void interrupt myISR()
 void main(void)
 {
     Init_IO();
-    __delay_ms(150);
-    __delay_ms(150);
-    __delay_ms(150);
-    OpenTimer0( TIMER_INT_ON & T0_16BIT & T0_SOURCE_INT & T0_PS_1_16);                   //setup timer 0 with prescaler x16
+    OpenTimer0( TIMER_INT_OFF & T0_16BIT & T0_SOURCE_INT & T0_PS_1_16);                   //setup timer 0 with prescaler x16
     WriteTimer0(3036);
     
     Init_Attributes();
 #ifdef TSL2561
     AddEndpoint(LightStrength,_INT,1,&Light_Strngth,READONLY,TSL_Init,TSL_GetData,0);
 #elif defined AMG8833
-    AddEndpoint(Temperature,_FLOAT,1,&Temp_Value,READONLY,AMG8833_Init,AMG88xx_GetTemp,0);
-    AddEndpoint(Temperature,_FLOAT,64,&Temp_Pixel,READONLY,NULL,AMG88xx_GetPixel,0);
+    AddEndpoint(Temperature,_FLOAT,1,(void *)&Temp_Value,READONLY,AMG8833_Init,AMG88xx_GetTemp,0);
+    AddEndpoint(Temperature,_FLOAT,64,(void *)Temp_Pixel,READONLY,NULL,AMG88xx_GetPixel,0);
+#elif defined DHT22
+    AddEndpoint(Temperature,_FLOAT,1,(void *)&(DHT_DATA.Temp),READONLY,DHT22_Init,Read_DHT22_Temp,0);
+    AddEndpoint(Humidity,_FLOAT,1,(void *)&(DHT_DATA.RH),READONLY,DHT22_Init,Read_DHT22_RH,0);
 #endif
     InitEndpoint();
 /*
@@ -110,13 +107,17 @@ void main(void)
 */
     while(1)
     {
+        if(INTCONbits.TMR0IF)
+        {
+            timerflag++;
+            INTCONbits.TMR0IF = 0;
+        }
         if(timerflag == REPORT_TIMER)
         {
             timerflag = 0;
             EndpointGetData();
             EndpointReport();
         }
-        //
     } 
 }
 

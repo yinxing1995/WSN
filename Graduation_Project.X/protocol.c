@@ -147,7 +147,10 @@ void EndpointReport()
     for(i=0;i<NumofElement;i++)
     {
         GenerateMessage(&Array[i], REPORT);
-        NOP();NOP();//frame cut
+        for(q=0;q<50;q++)
+        {
+            NOP();
+        }
     }
 #endif  
 }
