@@ -111,6 +111,7 @@ static void GenerateMessage(ClusterArray *pointer, unsigned char type)
     }
     Message[currentpos] = checksum;
     currentpos += 1;
+    USARTOut("Frame",strlen("Frame"));
     USARTOut(Message, currentpos);
     //Uprintf("Value = %f",*(float *)(pointer->Data));
 }
