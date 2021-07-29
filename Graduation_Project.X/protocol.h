@@ -13,11 +13,16 @@ extern "C" {
 #endif
 
 //UploadFrame:Length|FrameType|NodeID|Cluster|Endpoint|Controllable|Datatype|DataLength|Data|CheckSum
-//CheckFrame:Length|FrameType|NodeID|Cluster|Endpoint|Controllable|Datatype|DataLength|CheckSum
-//Construction:Length|FrameType|"Initialized"|CheckSum   
+
+/*
+* Might not be needed
+*
+* CheckFrame:Length|FrameType|NodeID|Cluster|Endpoint|Controllable|Datatype|DataLength|CheckSum
+* Construction:Length|FrameType|"Initialized"|CheckSum
+*/
 
 #define MAX_Num 5
-#define MAX_SIZE_OF_FRAME 100
+#define MAX_SIZE_OF_FRAME 300
 #define NODE_ID 1
 //#define DEBUG
 

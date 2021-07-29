@@ -9,41 +9,39 @@ void Init_I2C()
     IIC_SCL = 1;
 }
 
-//??IIC????
+//IIC start bit
 void IIC_Start(void)
 {
-    SDA_OUT();     //sda???
+    SDA_OUT();     //sda gets ready
     IIC_SDA=1;
     __delay_us(1); //inserted
     IIC_SCL=1;
     __delay_us(4);
     IIC_SDA=0;//START:when CLK is high,DATA change form high to low 
     __delay_us(4);
-    IIC_SCL=0;//??I2C????????????
+    IIC_SCL=0;//signal ends
     __delay_us(1); //inserted
 }   
 
-//??IIC????
+//IIC stop bit
 void IIC_Stop(void)
 {
-    SDA_OUT();      //sda???
+    SDA_OUT();      //sda gets ready
     IIC_SCL=0;
     __delay_us(1);  //inserted
     IIC_SDA=0;//STOP:when CLK is high DATA change form low to high
     __delay_us(4);
     IIC_SCL=1;
     __delay_us(1);  //inserted
-    IIC_SDA=1;//??I2C??????
+    IIC_SDA=1;//signal ends
     __delay_us(4);    
 }
 
-//????????
-//????1???????
-//        0???????
+//IIC wait for ACK signal
 unsigned char IIC_Wait_Ack(void)
 {
     unsigned char ucErrTime=0;
-    SDA_IN();      //SDA?????  
+    SDA_IN();      //SDA read
     IIC_SDA=1;__delay_us(1);    
     IIC_SCL=1;__delay_us(1);  
     while(IIC_SDA)
@@ -55,12 +53,12 @@ unsigned char IIC_Wait_Ack(void)
             return 1;
         }
     }
-    IIC_SCL=0;//????0
+    IIC_SCL=0;//end
     __delay_us(1);  //inserted
     return 0;  
 }
 
-//??ACK??
+//ACK
 void IIC_Ack(void)
 {
     IIC_SCL=0;
@@ -75,7 +73,7 @@ void IIC_Ack(void)
     __delay_us(1);  //inserted
 }
 
-//???ACK??     
+//NACK
 void IIC_NAck(void)
 {
     IIC_SCL=0;
@@ -90,15 +88,12 @@ void IIC_NAck(void)
     __delay_us(1);  //inserted
 }    
 
-//IIC??????
-//????????
-//1????
-//0????   
+//IIC Send
 void IIC_Send_Byte(unsigned char txd)
 {                        
     unsigned char t;   
     SDA_OUT();      
-    IIC_SCL=0;//??????????
+    IIC_SCL=0;//ready for rising edge
     __delay_us(1);  //inserted
     for(t=0;t<8;t++)
     {              
@@ -108,7 +103,7 @@ void IIC_Send_Byte(unsigned char txd)
         else
             IIC_SDA=0;
         txd<<=1;    
-        __delay_us(2);   //?TEA5767??????????
+        __delay_us(2); 
         IIC_SCL=1;
         __delay_us(2); 
         IIC_SCL=0; 
@@ -116,7 +111,7 @@ void IIC_Send_Byte(unsigned char txd)
     }  
 }
 
-//?1????ack=1????ACK?ack=0???nACK   
+//Read with ACK processing 
 unsigned char IIC_Read_Byte(unsigned char ack)
 {
     unsigned char i,receive=0;
