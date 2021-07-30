@@ -258,7 +258,7 @@ void SetChannel(unsigned char channel);
 //**** 	MRF24J40Init (initialises transceiver) ************************
 //*********************************************************************
 
-void MRF24J40Init(void);
+void MRF24J40Init(short int panid, short int shortaddress);
 
 //*********************************************************************
 //**** 	PHYTransmit (broadcasts packet) 		***********************

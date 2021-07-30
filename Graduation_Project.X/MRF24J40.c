@@ -94,7 +94,7 @@ void SetChannel(unsigned char channel)
 //**** 	MRF24J40Init (initialises transceiver) ************************
 //*********************************************************************
 
-void MRF24J40Init(void)
+void MRF24J40Init(short int panid, short int shortaddress)
 {  
     unsigned char i;
     unsigned int j;
@@ -107,10 +107,10 @@ void MRF24J40Init(void)
 	SetShortRAMAddr(WRITE_RFCTL,0x04);		//reset the RF module 
 	SetShortRAMAddr(WRITE_RFCTL,0x00);		//remove the RF module from reset
 	SetShortRAMAddr(WRITE_RXFLUSH,0x05);	//receive only data packets & flush the RX fifo 	
-	SetShortRAMAddr(WRITE_SADRL,0xFF);		//Program the short MAC Address, 0xffff
-	SetShortRAMAddr(WRITE_SADRH,0xFF);
-	SetShortRAMAddr(WRITE_PANIDL,0xFF);
-	SetShortRAMAddr(WRITE_PANIDH,0xFF);
+	SetShortRAMAddr(WRITE_SADRL,(unsigned char)(shortaddress%16));	//Program the short MAC Address
+	SetShortRAMAddr(WRITE_SADRH,(unsigned char)(shortaddress/16));
+	SetShortRAMAddr(WRITE_PANIDL,(unsigned char)(panid%16));
+	SetShortRAMAddr(WRITE_PANIDH,(unsigned char)(panid/16));
 	//for(i=0;i<64;i++) SetLongRAMAddr(SECURITY_FIFO+i,0);
     SetLongRAMAddr(RFCTRL2,0x80);			//enable the RF-PLL
 	SetLongRAMAddr(RFCTRL3,0x00);			//set TX for max output power
@@ -119,8 +119,9 @@ void MRF24J40Init(void)
 	SetShortRAMAddr(WRITE_BBREG2,0x38);		//CCA disabled
 	SetShortRAMAddr(WRITE_BBREG6,0x40);		//Enable the packet RSSI 
 	SetShortRAMAddr(WRITE_RSSITHCCA,0x00);	//Program CCA, RSSI threshold values
-	SetLongRAMAddr(RFCTRL0,0x00); 			//channel 11
-	SetShortRAMAddr(WRITE_RXMCR,0x23);		//set receive filter to accept all packets and never ACK 
+	SetLongRAMAddr(RFCTRL0,0x03); 			//channel 11
+	//SetShortRAMAddr(WRITE_RXMCR,0x23);		//set receive filter to accept all packets and never ACK, now it is a coordinator.
+    SetShortRAMAddr(WRITE_RXMCR,0x20);      //now it is strictest mode, every wrong frame would be filtered.
 	SetShortRAMAddr(WRITE_RFCTL,0x04); 		//reset the RF module with new settings
 	SetShortRAMAddr(WRITE_RFCTL,0x00);
 	SetShortRAMAddr(WRITE_INTMSK,0xF7);		//mask all interrupts except RXIF

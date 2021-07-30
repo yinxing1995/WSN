@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "protocol.h"
 #include "io.h"
+#include "wsn.h"
 #include <string.h>
 
 ClusterArray Array[MAX_Num];
@@ -111,8 +112,15 @@ static void GenerateMessage(ClusterArray *pointer, unsigned char type)
     }
     Message[currentpos] = checksum;
     currentpos += 1;
-    USARTOut("Frame",strlen("Frame"));
-    USARTOut(Message, currentpos);
+    if(NODE_ID == 1)
+    {
+        USARTOut("Frame",strlen("Frame"));
+        USARTOut(Message, currentpos);
+    }
+    else
+    {
+        WSNTransmit(Message, currentpos, PAN_ID, destination_addr, source_addr);
+    }
     //Uprintf("Value = %f",*(float *)(pointer->Data));
 }
 
@@ -154,4 +162,35 @@ void EndpointReport()
         }
     }
 #endif  
+}
+
+
+void MessageReport(unsigned char * buf)
+{
+    /*
+    if(!buf)
+    {
+        USARTOut("No info\r\n",strlen("No info\r\n"));
+        return;
+    }
+    else
+    {
+        USARTOut("Get\r\n",strlen("Get\r\n"));
+    }
+    */
+    if(!buf) return;
+    unsigned char temp = 0;
+    unsigned short int i,buflen;
+    memcpy(&buflen,buf,sizeof(buflen));
+    for(i=0;i<buflen-1;i++)
+    {
+        temp += buf[i];
+    }
+    if(temp != buf[i])
+        return;
+    else
+    {
+        USARTOut("Frame",strlen("Frame"));
+        USARTOut(buf, buflen);
+    }   
 }

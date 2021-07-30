@@ -79,6 +79,7 @@ void InitEndpoint();
 void EndpointGetData();
 void EndpointReport();
 
+void MessageReport(unsigned char *);
 
 #ifdef	__cplusplus
 }

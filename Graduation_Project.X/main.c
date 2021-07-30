@@ -5,10 +5,8 @@
 #include <stdlib.h>                              //standard library
 #include <stdio.h>
 #include <spi.h>                                  //serial peripheral interface functions
-//#include <delays.h>         //time delay functions
 #include <usart.h>                              //USART functions
 #include <string.h>                             //string functions
-//#include <adc.h>
 #include <timers.h>
 #include "MRF24J40.h"                       //driver function definitions for MRF24J40 RF transceiver
 #include <p18c452.h>
@@ -19,15 +17,14 @@
 #include "io.h"
 #include "protocol.h"
 #include "DHT22.h"
+#include "wsn.h"
 
-#define DHT22
+//#define DHT22
 //#define AMG8833
-//#define TSL2561
+#define TSL2561
 
-#define REPORT_TIMER 3
 
 volatile char rev = 0;
-volatile char timerflag = 0;
 
 void interrupt myISR()
 {
@@ -43,7 +40,8 @@ void interrupt myISR()
 void main(void)
 {
     Init_IO();
-    OpenTimer0( TIMER_INT_OFF & T0_16BIT & T0_SOURCE_INT & T0_PS_1_16);                   //setup timer 0 with prescaler x16
+    Node_Init();
+    OpenTimer0(TIMER_INT_OFF & T0_16BIT & T0_SOURCE_INT & T0_PS_1_16);                   //setup timer 0 with prescaler x16
     WriteTimer0(3036);
     
     Init_Attributes();
@@ -109,16 +107,20 @@ void main(void)
     {
         if(INTCONbits.TMR0IF)
         {
-            timerflag++;
+            Report_time++;
             INTCONbits.TMR0IF = 0;
         }
-        if(timerflag == REPORT_TIMER)
+        if(Report_time == REPORT_TIMER)
         {
-            timerflag = 0;
+            Report_time = 0;
             EndpointGetData();
             EndpointReport();
         }
-    } 
+        if(NODE_ID == 1)
+        {
+                MessageReport(MessageGet());
+        }
+    }
 }
 
 
