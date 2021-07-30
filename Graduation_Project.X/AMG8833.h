@@ -23,7 +23,7 @@ extern "C" {
 #define AMG88xx_ADR    0xD0 //5?????????
 //#define DEBUG
 
-//char Test[13];
+char Test[13];
 float Temp_Value;
 float Temp_Pixel[64];
 short unsigned int debugvalue;

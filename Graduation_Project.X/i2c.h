@@ -12,6 +12,8 @@
 extern "C" {
 #endif
 
+//#DEBUG    
+    
 //SDA RB6
 //SCL RB7
 
