@@ -12,7 +12,7 @@
 #define SHORT_ADDR_4 0x4444
 #define CHANNEL 12
 
-#define NODE_ID 3
+#define NODE_ID 1
 #define REPORT_TIMER 3
 //#define TIMES_ROUTING 3 //4 nodes
 

@@ -20,8 +20,8 @@
 #include "wsn.h"
 
 //#define DHT22
-//#define AMG8833
-#define TSL2561
+#define AMG8833
+//#define TSL2561
 
 
 volatile char rev = 0;
@@ -49,7 +49,7 @@ void main(void)
     AddEndpoint(LightStrength,_INT,1,&Light_Strngth,READONLY,TSL_Init,TSL_GetData,0);
 #elif defined AMG8833
     AddEndpoint(Temperature,_FLOAT,1,(void *)&Temp_Value,READONLY,AMG8833_Init,AMG88xx_GetTemp,0);
-    AddEndpoint(Temperature,_FLOAT,64,(void *)Temp_Pixel,READONLY,NULL,AMG88xx_GetPixel,0);
+    AddEndpoint(TemperatureArray,_FLOAT,64,(void *)Temp_Pixel,READONLY,NULL,AMG88xx_GetPixel,0);
 #elif defined DHT22
     AddEndpoint(Temperature,_FLOAT,1,(void *)&(DHT_DATA.Temp),READONLY,DHT22_Init,Read_DHT22_Temp,0);
     AddEndpoint(Humidity,_FLOAT,1,(void *)&(DHT_DATA.RH),READONLY,DHT22_Init,Read_DHT22_RH,0);
