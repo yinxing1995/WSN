@@ -46,7 +46,7 @@ enum Control
 
 enum DataType
 {
-    _INT = 0x00,
+    _INT32 = 0x00,
     _FLOAT = 0x01,
 };
 
@@ -55,6 +55,7 @@ enum FrameType
     REPORT = 0x00,
     CHECK = 0x01,
     NETSTATUS = 0x02,
+    CONTROL = 0X03;
 };
 
 typedef struct ClusterStructure

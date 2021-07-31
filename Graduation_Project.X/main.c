@@ -1,7 +1,5 @@
 #include <xc.h>
  
-
- 
 #include <stdlib.h>                              //standard library
 #include <stdio.h>
 #include <spi.h>                                  //serial peripheral interface functions
@@ -46,7 +44,7 @@ void main(void)
     
     Init_Attributes();
 #ifdef TSL2561
-    AddEndpoint(LightStrength,_INT,1,&Light_Strngth,READONLY,TSL_Init,TSL_GetData,0);
+    AddEndpoint(LightStrength,_INT32,1,&Light_Strngth,READONLY,TSL_Init,TSL_GetData,0);
 #elif defined AMG8833
     AddEndpoint(Temperature,_FLOAT,1,(void *)&Temp_Value,READONLY,AMG8833_Init,AMG88xx_GetTemp,0);
     AddEndpoint(TemperatureArray,_FLOAT,64,(void *)Temp_Pixel,READONLY,NULL,AMG88xx_GetPixel,0);

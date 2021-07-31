@@ -44,10 +44,10 @@ void EndpointGetData()
     int i = 0;
     for(i=0;i<NumofElement;i++)
     {
-        if(Array[i].DataType == _INT)
-            Array[i].GetData(Array[i].Data);
-        else
-            Array[i].GetData(Array[i].Data);
+        //if(Array[i].DataType == _INT32)
+        Array[i].GetData(Array[i].Data);
+        //else
+            //Array[i].GetData(Array[i].Data);
     }
 }
 
@@ -59,8 +59,8 @@ static void GenerateMessage(ClusterArray *pointer, unsigned char type)
     int i = 0;
     switch(pointer->DataType)
     {
-        case _INT:
-            datasize = sizeof(int);
+        case _INT32:
+            datasize = sizeof(signed long);
             break;
         case _FLOAT:
             datasize = sizeof(float);

@@ -88,13 +88,13 @@ void TSL_Init()
 
 void TSL_GetData(void * Data)
 {
-    int value = (int)TSL_Get_Light_Channel0();
+    signed long value = (signed long)TSL_Get_Light_Channel0();
     /*
     char p[10];   
     sprintf(p,"Data=%d\r\n",value);
     USARTOut(p,strlen(p));
     */
-    memcpy(Data, &value, sizeof(int));
+    memcpy(Data, &value, sizeof(signed long));
     //int* T = (int *)Data;
     //sprintf(p,"Copied value=%d\r\n",T);
     //USARTOut(p,strlen(p));
