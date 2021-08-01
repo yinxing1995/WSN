@@ -26,7 +26,7 @@ extern "C" {
 #define TSL2561_CONTROL_POWERON   (0x03)
 #define TSL2561_CONTROL_POWEROFF  (0x00)
 
-int Light_Strngth; 
+unsigned long Light_Strngth; 
 
 enum
 {

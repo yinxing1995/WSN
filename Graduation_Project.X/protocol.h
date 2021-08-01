@@ -17,7 +17,7 @@ extern "C" {
 /*
 * Might not be needed
 *
-* CheckFrame:Length|FrameType|NodeID|Cluster|Endpoint|Controllable|Datatype|DataLength|CheckSum
+* CheckFrame:Length|FrameType|NodeID|*Cluster*|Endpoint|*Controllable*|Datatype|DataLength|Data|CheckSum
 * Construction:Length|FrameType|"Initialized"|CheckSum
 */
 
@@ -55,7 +55,7 @@ enum FrameType
     REPORT = 0x00,
     CHECK = 0x01,
     NETSTATUS = 0x02,
-    CONTROL = 0X03;
+    CONTROL = 0X03,
 };
 
 typedef struct ClusterStructure
