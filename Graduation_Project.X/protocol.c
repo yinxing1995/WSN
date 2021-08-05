@@ -340,3 +340,31 @@ void CommandPro(void)
             break;
     }
 }
+
+void MessagePro(unsigned char * buf)
+{
+    if(!buf) return;
+    unsigned char temp = 0;
+    unsigned short int i,buflen;
+    memcpy(&buflen,buf,sizeof(buflen));
+    for(i=0;i<buflen-1;i++)
+    {
+        temp += buf[i];
+        Uprintf("Recieved: %d\r\n", buf[i]);
+    }
+    if(temp != buf[i])
+        return;
+    else
+    {
+        Uprintf("Recieved Message!!\r\n");
+        temp = buf[4];
+        for(i=0;i<NumofElement;i++)
+        {
+            if(Array[i].Endpoint == temp)
+                break;
+        }
+        if(i == NumofElement)
+            return;
+        Array[i].ControlFun(&buf[7]);
+    }   
+}

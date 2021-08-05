@@ -1,10 +1,7 @@
 #include <xc.h>
  
-//#include <stdlib.h>                              //standard library
 #include <stdio.h>
-#include <spi.h>                                  //serial peripheral interface functions
-#include <usart.h>                              //USART functions
-#include <string.h>                             //string functions
+//#include <string.h>                             //string functions
 #include <timers.h>
 #include "MRF24J40.h"                       //driver function definitions for MRF24J40 RF transceiver
 #include <p18c452.h>
@@ -12,7 +9,7 @@
 //#include "i2c.h"
 #include "TSL2561.h"
 //#include "crc.h"
-#include "io.h"
+//#include "io.h"
 #include "protocol.h"
 #include "DHT22.h"
 #include "wsn.h"
@@ -20,9 +17,9 @@
 #include "ringbuffer.h"
 
 //#define DHT22
-#define AMG8833
+//#define AMG8833
 //#define TSL2561
-//#define LED
+#define LED
 
 volatile char rev = 0;
 
@@ -122,9 +119,13 @@ void main(void)
         }
         if(NODE_ID == 1)
         {
-                MessageReport(MessageGet());
-                CommandPro();
-        }       
+            MessageReport(MessageGet());
+            CommandPro();
+        }
+        else
+        {
+            MessagePro(MessageGet());
+        }
     }
 }
 

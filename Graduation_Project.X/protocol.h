@@ -84,6 +84,7 @@ void EndpointReport();
 
 void MessageReport(unsigned char *);
 void CommandPro(void);
+void MessagePro(unsigned char *);
 
 #ifdef	__cplusplus
 }
