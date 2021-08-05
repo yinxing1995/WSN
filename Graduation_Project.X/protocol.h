@@ -24,9 +24,11 @@ extern "C" {
 #define MAX_Num 5
 #define MAX_SIZE_OF_FRAME 300
 #define NODE_ID 1
+#define FRAMEFLAG "Frame"
 //#define DEBUG
 
 char Message[MAX_SIZE_OF_FRAME];
+volatile char Command[MAX_SIZE_OF_FRAME];
 
 enum Cluster
 {
@@ -81,6 +83,7 @@ void EndpointGetData();
 void EndpointReport();
 
 void MessageReport(unsigned char *);
+void CommandPro(void);
 
 #ifdef	__cplusplus
 }

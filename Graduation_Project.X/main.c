@@ -1,6 +1,6 @@
 #include <xc.h>
  
-#include <stdlib.h>                              //standard library
+//#include <stdlib.h>                              //standard library
 #include <stdio.h>
 #include <spi.h>                                  //serial peripheral interface functions
 #include <usart.h>                              //USART functions
@@ -17,11 +17,12 @@
 #include "DHT22.h"
 #include "wsn.h"
 #include "LED.h"
+#include "ringbuffer.h"
 
 //#define DHT22
-//#define AMG8833
+#define AMG8833
 //#define TSL2561
-#define LED
+//#define LED
 
 volatile char rev = 0;
 
@@ -31,7 +32,8 @@ void interrupt myISR()
     {
         rev = ReadUSART();
         PIR1bits.RCIF = 0;
-        USARTOut((const char *)&rev,1);
+        //USARTOut((const char *)&rev,1);
+        BufferWrite(&rev, 1);
     }
 }
 
@@ -42,6 +44,7 @@ void main(void)
     Node_Init();
     OpenTimer0(TIMER_INT_OFF & T0_16BIT & T0_SOURCE_INT & T0_PS_1_16);                   //setup timer 0 with prescaler x16
     WriteTimer0(3036);
+    BufferInit(Command, sizeof(Command));
     
     Init_Attributes();
 #ifdef TSL2561
@@ -120,7 +123,8 @@ void main(void)
         if(NODE_ID == 1)
         {
                 MessageReport(MessageGet());
-        }
+                CommandPro();
+        }       
     }
 }
 
